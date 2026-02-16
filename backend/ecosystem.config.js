@@ -1,5 +1,4 @@
 require('dotenv').config({ path: '../.env.deploy' });
-const path = require('path');
 
 const {
   DEPLOY_USER,
@@ -9,8 +8,6 @@ const {
   DEPLOY_PATH_BACKEND,
   DEPLOY_SSH_KEY = '~/.ssh/id_ed25519_me',
 } = process.env;
-
-const envPath = path.resolve(__dirname, '.env');
 
 module.exports = {
   apps: [{
@@ -39,7 +36,7 @@ module.exports = {
       repo: DEPLOY_REPO,
       path: DEPLOY_PATH_BACKEND,
       key: DEPLOY_SSH_KEY,
-      'pre-deploy': `scp -i ${DEPLOY_SSH_KEY} ${envPath} ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH_BACKEND}/current/backend/.env`,
+      'pre-deploy': `scp -i ${DEPLOY_SSH_KEY} "./.env" ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH_BACKEND}/current/backend/.env`,
       'post-deploy': 'cd backend && npm ci && npm run build && pm2 reload ecosystem.config.js --env production',
       'pre-setup': '',
     },
