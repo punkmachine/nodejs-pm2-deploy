@@ -2,3 +2,8 @@
 node_modules
 *.log
 build
+.env.deploy
+.env
+.env.local
+build
+dist

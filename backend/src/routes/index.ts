@@ -14,6 +14,14 @@ const router = Router();
 router.post('/signup', validateUserBody, createUser);
 router.post('/signin', validateAuthentication, login);
 
+// Эндпоинт для краштеста
+router.get('/crash-test', (req: Request, res: Response) => {
+  res.status(200).send({ message: 'Сервер сейчас упадёт' });
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
 // все роуты, кроме /signin и /signup, защищены авторизацией;
 router.use(auth);
 router.use('/users', userRouter);
