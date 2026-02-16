@@ -36,7 +36,7 @@ module.exports = {
       repo: DEPLOY_REPO,
       path: DEPLOY_PATH_FRONTEND,
       key: DEPLOY_SSH_KEY,
-      'post-deploy': 'source ~/.nvm/nvm.sh && cd frontend && npm ci && npm run build && pm2 reload ecosystem.config.js --env production',
+      'post-deploy': 'source ~/.nvm/nvm.sh && cd frontend && npm ci && NODE_OPTIONS=--openssl-legacy-provider npm run build && pm2 reload ecosystem.config.js --env production',
       'pre-setup': '',
     },
   },
