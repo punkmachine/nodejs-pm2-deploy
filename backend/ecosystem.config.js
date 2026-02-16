@@ -12,8 +12,8 @@ const {
 module.exports = {
   apps: [{
     name: 'mesto-backend',
-    script: './backend/dist/app.js',
-    cwd: `${DEPLOY_PATH_BACKEND}/current`,
+    script: './dist/app.js',
+    cwd: `${DEPLOY_PATH_BACKEND || '/home/first-try-yandex/mesto-backend'}/current/backend`,
     instances: 1,
     exec_mode: 'fork',
     env: {
