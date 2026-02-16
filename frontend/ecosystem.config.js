@@ -1,4 +1,6 @@
 require('dotenv').config({ path: '../.env.deploy' });
+const os = require('os');
+const path = require('path');
 
 const {
   DEPLOY_USER,
@@ -8,6 +10,16 @@ const {
   DEPLOY_PATH_FRONTEND,
   DEPLOY_SSH_KEY = '~/.ssh/id_ed25519_me',
 } = process.env;
+
+// Раскрываем тильду в абсолютный путь
+const resolveKeyPath = (keyPath) => {
+  if (keyPath.startsWith('~')) {
+    return path.join(os.homedir(), keyPath.slice(1));
+  }
+  return keyPath;
+};
+
+const resolvedKeyPath = resolveKeyPath(DEPLOY_SSH_KEY);
 
 module.exports = {
   apps: [{
@@ -35,7 +47,7 @@ module.exports = {
       ref: DEPLOY_REF,
       repo: DEPLOY_REPO,
       path: DEPLOY_PATH_FRONTEND,
-      key: DEPLOY_SSH_KEY,
+      key: resolvedKeyPath,
       'post-deploy': 'cd frontend && npm ci && npm run build',
       'pre-setup': '',
     },
