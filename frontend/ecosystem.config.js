@@ -14,9 +14,12 @@ const {
 // Раскрываем тильду в абсолютный путь
 const resolveKeyPath = (keyPath) => {
   if (keyPath.startsWith('~')) {
-    return path.join(os.homedir(), keyPath.slice(1));
+    // Заменяем тильду на домашнюю директорию и нормализуем путь
+    const resolvedPath = path.join(os.homedir(), keyPath.slice(1).replace(/\//g, path.sep));
+    return path.normalize(resolvedPath);
   }
-  return keyPath;
+
+  return path.normalize(keyPath);
 };
 
 const resolvedKeyPath = resolveKeyPath(DEPLOY_SSH_KEY);
