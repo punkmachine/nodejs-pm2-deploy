@@ -1,6 +1,4 @@
 require('dotenv').config({ path: '../.env.deploy' });
-const os = require('os');
-const path = require('path');
 
 const {
   DEPLOY_USER,
@@ -10,27 +8,6 @@ const {
   DEPLOY_PATH_FRONTEND,
   DEPLOY_SSH_KEY = '~/.ssh/id_ed25519_me',
 } = process.env;
-
-// Раскрываем тильду в абсолютный путь
-const resolveKeyPath = (keyPath) => {
-  if (keyPath.startsWith('~')) {
-    const resolvedPath = path.join(os.homedir(), keyPath.slice(1).replace(/\//g, path.sep));
-    const normalizedPath = path.normalize(resolvedPath);
-    
-    // Конвертируем Windows-путь в формат Git Bash (C:\Users\... -> /c/Users/...)
-    if (process.platform === 'win32') {
-      return normalizedPath
-        .replace(/^([A-Z]):/, (_, drive) => `/${drive.toLowerCase()}`)
-        .replace(/\\/g, '/');
-    }
-    
-    return normalizedPath;
-  }
-
-  return keyPath;
-};
-
-const resolvedKeyPath = resolveKeyPath(DEPLOY_SSH_KEY);
 
 module.exports = {
   apps: [{
@@ -58,7 +35,7 @@ module.exports = {
       ref: DEPLOY_REF,
       repo: DEPLOY_REPO,
       path: DEPLOY_PATH_FRONTEND,
-      key: resolvedKeyPath,
+      key: DEPLOY_SSH_KEY,
       'post-deploy': 'cd frontend && npm ci && npm run build',
       'pre-setup': '',
     },

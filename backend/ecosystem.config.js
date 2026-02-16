@@ -1,6 +1,4 @@
 require('dotenv').config({ path: '../.env.deploy' });
-const os = require('os');
-const path = require('path');
 
 const {
   DEPLOY_USER,
@@ -10,25 +8,6 @@ const {
   DEPLOY_PATH_BACKEND,
   DEPLOY_SSH_KEY = '~/.ssh/id_ed25519_me',
 } = process.env;
-
-const resolveKeyPath = (keyPath) => {
-  if (keyPath.startsWith('~')) {
-    const resolvedPath = path.join(os.homedir(), keyPath.slice(1).replace(/\//g, path.sep));
-    const normalizedPath = path.normalize(resolvedPath);
-
-    if (process.platform === 'win32') {
-      return normalizedPath
-        .replace(/^([A-Z]):/, (_, drive) => `/${drive.toLowerCase()}`)
-        .replace(/\\/g, '/');
-    }
-
-    return normalizedPath;
-  }
-
-  return keyPath;
-};
-
-const resolvedKeyPath = resolveKeyPath(DEPLOY_SSH_KEY);
 
 module.exports = {
   apps: [{
@@ -56,8 +35,8 @@ module.exports = {
       ref: DEPLOY_REF,
       repo: DEPLOY_REPO,
       path: DEPLOY_PATH_BACKEND,
-      key: resolvedKeyPath,
-      'pre-deploy': `scp -i ${resolvedKeyPath} ./.env ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH_BACKEND}/current/backend/.env`,
+      key: DEPLOY_SSH_KEY,
+      'pre-deploy': `scp -i ${DEPLOY_SSH_KEY} ./.env ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH_BACKEND}/current/backend/.env`,
       'post-deploy': 'cd backend && npm ci && npm run build && pm2 reload ecosystem.config.js --env production',
       'pre-setup': '',
     },
