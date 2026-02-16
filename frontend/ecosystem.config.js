@@ -6,6 +6,7 @@ const {
   DEPLOY_REF = 'origin/master',
   DEPLOY_REPO,
   DEPLOY_PATH_FRONTEND,
+  DEPLOY_SSH_KEY = '~/.ssh/id_ed25519_me',
 } = process.env;
 
 module.exports = {
@@ -34,6 +35,7 @@ module.exports = {
       ref: DEPLOY_REF,
       repo: DEPLOY_REPO,
       path: DEPLOY_PATH_FRONTEND,
+      key: DEPLOY_SSH_KEY,
       'post-deploy': 'cd frontend && npm ci && npm run build',
       'pre-setup': '',
     },

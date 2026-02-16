@@ -35,6 +35,7 @@ module.exports = {
       ref: DEPLOY_REF,
       repo: DEPLOY_REPO,
       path: DEPLOY_PATH_BACKEND,
+      key: DEPLOY_SSH_KEY,
       'pre-deploy': `scp -i ${DEPLOY_SSH_KEY} ./backend/.env ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH_BACKEND}/current/backend/.env`,
       'post-deploy': 'cd backend && npm ci && npm run build && pm2 reload ecosystem.config.js --env production',
       'pre-setup': '',
