@@ -140,6 +140,6 @@ class Api {
   }
 
   // Замените на адрес вашего бэкенда
-  const api = new Api(process.env.REACT_APP_API_URL);
+  const api = new Api(process.env.REACT_APP_API_URL || 'https://api.diplom.nomorepartiessbs.ru');
 
   export default api;
