@@ -1,4 +1,5 @@
 require('dotenv').config({ path: '../.env.deploy' });
+const path = require('path');
 
 const {
   DEPLOY_USER,
@@ -9,7 +10,7 @@ const {
   DEPLOY_SSH_KEY = '~/.ssh/id_ed25519_me',
 } = process.env;
 
-const envPath = path.resolve(__dirname, '.env'); ё;
+const envPath = path.resolve(__dirname, '.env');
 
 module.exports = {
   apps: [{
