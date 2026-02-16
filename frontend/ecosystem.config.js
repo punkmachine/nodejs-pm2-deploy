@@ -6,7 +6,7 @@ const {
   DEPLOY_REF = 'origin/master',
   DEPLOY_REPO,
   DEPLOY_PATH_FRONTEND,
-  DEPLOY_SSH_KEY = '~/.ssh/id_ed25519_me',
+  DEPLOY_SSH_KEY = '~/.ssh/id_ed25519_deploy',
 } = process.env;
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
     name: 'mesto-frontend',
     script: 'serve',
     args: '-s frontend/build -l 3001',
-    cwd: `${DEPLOY_PATH_FRONTEND}/current`,
+    cwd: `${DEPLOY_PATH_FRONTEND || '/home/first-try-yandex/mesto-frontend'}/current`,
     instances: 1,
     exec_mode: 'fork',
     env: {
@@ -36,7 +36,7 @@ module.exports = {
       repo: DEPLOY_REPO,
       path: DEPLOY_PATH_FRONTEND,
       key: DEPLOY_SSH_KEY,
-      'post-deploy': 'cd frontend && npm ci && npm run build',
+      'post-deploy': 'source ~/.nvm/nvm.sh && cd frontend && npm ci && npm run build && pm2 reload ecosystem.config.js --env production',
       'pre-setup': '',
     },
   },
