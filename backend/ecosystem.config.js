@@ -14,11 +14,18 @@ const {
 const resolveKeyPath = (keyPath) => {
   if (keyPath.startsWith('~')) {
     const resolvedPath = path.join(os.homedir(), keyPath.slice(1).replace(/\//g, path.sep));
+    const normalizedPath = path.normalize(resolvedPath);
 
-    return path.normalize(resolvedPath);
+    if (process.platform === 'win32') {
+      return normalizedPath
+        .replace(/^([A-Z]):/, (_, drive) => `/${drive.toLowerCase()}`)
+        .replace(/\\/g, '/');
+    }
+
+    return normalizedPath;
   }
 
-  return path.normalize(keyPath);
+  return keyPath;
 };
 
 const resolvedKeyPath = resolveKeyPath(DEPLOY_SSH_KEY);
